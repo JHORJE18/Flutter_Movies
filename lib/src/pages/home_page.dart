@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movies/src/provider/movies_provider.dart';
 import 'package:movies/src/widgets/card_swiper_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,13 +21,18 @@ class HomePage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Column(
-          children: [
-            CardSwiperWidget(
-              listadoPeliculas: [1, 2, 3, 4, 5],
-            )
-          ],
+          children: [_peliculasEnCine()],
         ),
       ),
+    );
+  }
+
+  Widget _peliculasEnCine() {
+    final MovieProvider mp = new MovieProvider();
+    mp.getEnCines();
+
+    return CardSwiperWidget(
+      listadoPeliculas: [1, 2, 3, 4, 5],
     );
   }
 }
