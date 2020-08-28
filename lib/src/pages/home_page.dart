@@ -4,7 +4,7 @@ import 'package:movies/src/provider/movies_provider.dart';
 import 'package:movies/src/widgets/card_swiper_widget.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  final MovieProvider moviesProvider = new MovieProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +21,25 @@ class HomePage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Column(
-          children: [_peliculasEnCine()],
+          children: [_swipeMovies()],
         ),
       ),
     );
   }
 
-  Widget _peliculasEnCine() {
-    final MovieProvider mp = new MovieProvider();
-    mp.getEnCines();
-
-    return CardSwiperWidget(
-      listadoPeliculas: [1, 2, 3, 4, 5],
+  Widget _swipeMovies() {
+    return FutureBuilder(
+      future: moviesProvider.getEnCines(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return CardSwiperWidget(
+            listadoPeliculas: snapshot.data,
+          );
+        } else {
+          return Container(
+              height: 400, child: Center(child: CircularProgressIndicator()));
+        }
+      },
     );
   }
 }

@@ -14,6 +14,8 @@ class Movies {
 }
 
 class Movie {
+  final String _directoryImg = 'https://image.tmdb.org/t/p/w500';
+
   double popularity;
   int voteCount;
   bool video;
@@ -50,6 +52,7 @@ class Movie {
     popularity = json['popularity'] / 1;
     voteCount = json['vote_count'];
     video = json['video'];
+    posterPath = json['poster_path'];
     id = json['id'];
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
@@ -60,5 +63,13 @@ class Movie {
     voteAverage = json['vote_average'] / 1;
     overview = json['overview'];
     releaseDate = json['release_date'];
+  }
+
+  String getPosterImg() {
+    if (posterPath == null) {
+      return 'https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png';
+    }
+
+    return _directoryImg + posterPath;
   }
 }
