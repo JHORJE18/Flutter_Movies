@@ -16,7 +16,20 @@ class MovieProvider {
       'language': _language,
     });
 
-    final resp = await http.get(llamada_url);
+    return _getResults(llamada_url);
+  }
+
+  Future<List<Movie>> getPopulares() async {
+    final Uri llamada_url = Uri.https(_url, _apiVersion + '/movie/popular', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+
+    return _getResults(llamada_url);
+  }
+
+  Future<List<Movie>> _getResults(Uri url) async {
+    final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
     Movies list = new Movies.fromJsonList(decodedData['results']);
