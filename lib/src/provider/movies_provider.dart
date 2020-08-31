@@ -78,4 +78,15 @@ class MovieProvider {
 
     return list.items;
   }
+
+  Future<List<Movie>> searchMovies(String query) async {
+    final Uri llamadaUrl = Uri.https(_url, _apiVersion + '/search/movie', {
+      'api_key': _apiKey,
+      'language': _language,
+      'query': query,
+      'include_adult': true.toString()
+    });
+
+    return _getResults(llamadaUrl);
+  }
 }

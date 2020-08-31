@@ -11,7 +11,7 @@ class MovieDetailPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _crearAppBar(movie),
+          _crearAppBar(context, movie),
           SliverList(
             delegate: SliverChildListDelegate([
               SizedBox(height: 10.0),
@@ -29,10 +29,9 @@ class MovieDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _crearAppBar(Movie movie) {
+  Widget _crearAppBar(BuildContext context, Movie movie) {
     return SliverAppBar(
       elevation: 2.0,
-      backgroundColor: Colors.indigoAccent,
       expandedHeight: 200.0,
       floating: false,
       pinned: true,
@@ -40,12 +39,18 @@ class MovieDetailPage extends StatelessWidget {
         centerTitle: true,
         title: Text(
           movie.title,
-          style: TextStyle(color: Colors.white, fontSize: 16.0),
+          style: TextStyle(fontSize: 16.0),
         ),
-        background: FadeInImage(
-          image: NetworkImage(movie.getBackgroundImg()),
-          placeholder: AssetImage('assets/img/loading-infinite.gif'),
-          fit: BoxFit.cover,
+        background: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/image',
+                arguments: movie.getBackgroundImg());
+          },
+          child: FadeInImage(
+            image: NetworkImage(movie.getBackgroundImg()),
+            placeholder: AssetImage('assets/img/loading-infinite.gif'),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -59,14 +64,20 @@ class MovieDetailPage extends StatelessWidget {
         children: [
           Hero(
             tag: movie.uiHero,
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              elevation: 3.0,
-              child: Image(
-                image: NetworkImage(movie.getPosterImg()),
-                height: 150.0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/image',
+                    arguments: movie.getPosterImg());
+              },
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                elevation: 3.0,
+                child: Image(
+                  image: NetworkImage(movie.getPosterImg()),
+                  height: 150.0,
+                ),
               ),
             ),
           ),
@@ -102,6 +113,15 @@ class MovieDetailPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
+                    Icon(Icons.people),
+                    SizedBox(
+                      width: 5.0,
+                    ),
+                    Text(movie.popularity.toString())
+                  ],
+                ),
+                Row(
+                  children: [
                     Icon(Icons.star_border),
                     SizedBox(
                       width: 5.0,
@@ -109,6 +129,7 @@ class MovieDetailPage extends StatelessWidget {
                     Text(movie.voteAverage.toString())
                   ],
                 ),
+                _showAdult(movie.adult)
               ],
             ),
           )
@@ -118,13 +139,25 @@ class MovieDetailPage extends StatelessWidget {
   }
 
   Widget _descripcion(BuildContext context, Movie movie) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text(
-        movie.overview,
-        textAlign: TextAlign.justify,
-        style: Theme.of(context).textTheme.bodyText2,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+            child: Text(
+              'Descripción:',
+              textAlign: TextAlign.justify,
+              style: Theme.of(context).textTheme.headline5,
+            )),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0),
+          child: Text(
+            movie.overview,
+            textAlign: TextAlign.justify,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ),
+      ],
     );
   }
 
@@ -183,5 +216,17 @@ class MovieDetailPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _showAdult(bool isAdult) {
+    if (isAdult) {
+      return Text(
+        '+18',
+        style: TextStyle(
+            color: Colors.redAccent, fontWeight: FontWeight.bold, fontSize: 20),
+      );
+    }
+
+    return Container();
   }
 }

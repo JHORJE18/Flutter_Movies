@@ -13,8 +13,9 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Películas 🎬'),
-        backgroundColor: Colors.indigoAccent,
+        title: Row(
+          children: [Text('Películas en cines 🎬')],
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
@@ -24,10 +25,16 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [_swipeMovies(), _footer(context)],
+      body: Container(
+        color: Color(0xFF070E34),
+        child: SafeArea(
+          child: Container(
+            color: Color(0xFF08113F),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [_swipeMovies(), _footer(context)],
+            ),
+          ),
         ),
       ),
     );
@@ -51,18 +58,20 @@ class HomePage extends StatelessWidget {
 
   Widget _footer(BuildContext context) {
     return Container(
+      color: Color(0xFF070E34),
+      padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             margin: EdgeInsets.only(left: 20.0),
             child: Text(
-              'Populares',
-              style: Theme.of(context).textTheme.subtitle2,
+              'Películas populares 🎖',
+              style: Theme.of(context).textTheme.headline6,
             ),
           ),
           SizedBox(
-            height: 5.0,
+            height: 20.0,
           ),
           StreamBuilder(
             stream: moviesProvider.popularesStream,
