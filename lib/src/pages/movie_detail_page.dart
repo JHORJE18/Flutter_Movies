@@ -7,6 +7,7 @@ class MovieDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Movie movie = ModalRoute.of(context).settings.arguments;
+    final MovieProvider movieProvider = new MovieProvider();
 
     return Scaffold(
       body: CustomScrollView(
@@ -195,7 +196,17 @@ class MovieDetailPage extends StatelessWidget {
   Widget _crearCardActor(BuildContext context, Actor actor) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/actor', arguments: actor.actorDetail);
+        if (actor.actorDetail != null) {
+          Navigator.pushNamed(context, '/actor', arguments: actor.actorDetail);
+        } else {
+          new MovieProvider()
+              .getActorDetails(actor.id)
+              .then((ActorDetail actorDetail) {
+            actor.actorDetail = actorDetail;
+            Navigator.pushNamed(context, '/actor',
+                arguments: actor.actorDetail);
+          });
+        }
       },
       child: Container(
         margin: EdgeInsets.only(right: 15.0),
