@@ -27,16 +27,22 @@ class ActorDetailPage extends StatelessWidget {
             ),
             Row(
               children: [
-                Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100)),
-                  child: FadeInImage(
-                      image: NetworkImage(actor.getPicture()),
-                      placeholder: AssetImage('assets/loading-infinite.gif'),
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/image',
+                        arguments: actor.getPicture());
+                  },
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100)),
+                    child: FadeInImage(
+                        image: NetworkImage(actor.getPicture()),
+                        placeholder: AssetImage('assets/loading-infinite.gif'),
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover),
+                  ),
                 ),
                 SizedBox(
                   width: 10,
