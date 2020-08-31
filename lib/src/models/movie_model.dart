@@ -72,4 +72,12 @@ class Movie {
 
     return _directoryImg + posterPath;
   }
+
+  String getBackgroundImg() {
+    if (backdropPath == null) {
+      return 'https://www.allianceplast.com/wp-content/uploads/2017/11/no-image.png';
+    }
+
+    return _directoryImg + backdropPath;
+  }
 }

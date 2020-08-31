@@ -14,21 +14,29 @@ class CardSwiperWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: new Swiper(
-          itemBuilder: (BuildContext context, int i) {
-            return Card(
-                clipBehavior: Clip.antiAlias,
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                child: new FadeInImage(
-                    placeholder: AssetImage('assets/img/loading-spinner.gif'),
-                    image: NetworkImage(listadoPeliculas[i].getPosterImg()),
-                    fit: BoxFit.fill));
+          itemBuilder: (context, index) {
+            return _crearCard(context, index);
           },
           itemCount: listadoPeliculas.length,
           itemWidth: _screenSize.width * 0.7,
           itemHeight: _screenSize.height * 0.5,
           layout: SwiperLayout.STACK),
+    );
+  }
+
+  Widget _crearCard(BuildContext context, int i) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/detalle',
+          arguments: listadoPeliculas[i]),
+      child: Card(
+          clipBehavior: Clip.antiAlias,
+          elevation: 2,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: new FadeInImage(
+              placeholder: AssetImage('assets/img/loading-spinner.gif'),
+              image: NetworkImage(listadoPeliculas[i].getPosterImg()),
+              fit: BoxFit.fill)),
     );
   }
 }
