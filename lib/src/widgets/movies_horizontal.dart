@@ -33,7 +33,7 @@ class MoviesHorizontalWidget extends StatelessWidget {
   }
 
   Widget _crearTarjeta(BuildContext context, Movie peli) {
-    return Container(
+    final movieCard = Container(
       margin: EdgeInsets.only(right: 15.0),
       child: Column(
         children: [
@@ -56,6 +56,13 @@ class MoviesHorizontalWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+
+    return GestureDetector(
+      child: movieCard,
+      onTap: () {
+        Navigator.pushNamed(context, '/detalle', arguments: peli);
+      },
     );
   }
 
