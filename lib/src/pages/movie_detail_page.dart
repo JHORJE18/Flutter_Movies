@@ -168,7 +168,7 @@ class MovieDetailPage extends StatelessWidget {
       future: movieProvider.getCast(movie.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _crearActoresPageView(snapshot.data);
+          return _crearActoresPageView(context, snapshot.data);
         } else {
           return Center(
             child: CircularProgressIndicator(),
@@ -178,7 +178,7 @@ class MovieDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _crearActoresPageView(List<Actor> cast) {
+  Widget _crearActoresPageView(BuildContext context, List<Actor> cast) {
     return SizedBox(
       height: 200.0,
       child: PageView.builder(
@@ -186,34 +186,39 @@ class MovieDetailPage extends StatelessWidget {
         controller: PageController(initialPage: 1, viewportFraction: 0.3),
         itemCount: cast.length,
         itemBuilder: (context, index) {
-          return _crearCardActor(cast[index]);
+          return _crearCardActor(context, cast[index]);
         },
       ),
     );
   }
 
-  Widget _crearCardActor(Actor actor) {
-    return Container(
-      margin: EdgeInsets.only(right: 15.0),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAlias,
-            elevation: 2,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: FadeInImage(
-              image: NetworkImage(actor.getPicture()),
-              placeholder: AssetImage('assets/img/loading-spinner.gif'),
-              fit: BoxFit.cover,
-              height: 150.0,
+  Widget _crearCardActor(BuildContext context, Actor actor) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/actor', arguments: actor.actorDetail);
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 15.0),
+        child: Column(
+          children: [
+            Card(
+              clipBehavior: Clip.antiAlias,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: FadeInImage(
+                image: NetworkImage(actor.getPicture()),
+                placeholder: AssetImage('assets/img/loading-spinner.gif'),
+                fit: BoxFit.cover,
+                height: 150.0,
+              ),
             ),
-          ),
-          Text(
-            actor.name,
-            overflow: TextOverflow.ellipsis,
-          )
-        ],
+            Text(
+              actor.name,
+              overflow: TextOverflow.ellipsis,
+            )
+          ],
+        ),
       ),
     );
   }
