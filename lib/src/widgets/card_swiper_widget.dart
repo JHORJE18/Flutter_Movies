@@ -25,18 +25,23 @@ class CardSwiperWidget extends StatelessWidget {
   }
 
   Widget _crearCard(BuildContext context, int i) {
+    listadoPeliculas[i].uiHero = '${listadoPeliculas[i].id}-Poster';
+
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/detalle',
           arguments: listadoPeliculas[i]),
-      child: Card(
-          clipBehavior: Clip.antiAlias,
-          elevation: 2,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: new FadeInImage(
-              placeholder: AssetImage('assets/img/loading-spinner.gif'),
-              image: NetworkImage(listadoPeliculas[i].getPosterImg()),
-              fit: BoxFit.fill)),
+      child: Hero(
+        tag: listadoPeliculas[i].uiHero,
+        child: Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: new FadeInImage(
+                placeholder: AssetImage('assets/img/loading-spinner.gif'),
+                image: NetworkImage(listadoPeliculas[i].getPosterImg()),
+                fit: BoxFit.fill)),
+      ),
     );
   }
 }

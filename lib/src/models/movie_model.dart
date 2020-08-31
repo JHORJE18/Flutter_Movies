@@ -31,6 +31,8 @@ class Movie {
   String overview;
   String releaseDate;
 
+  String uiHero;
+
   Movie({
     this.popularity,
     this.voteCount,

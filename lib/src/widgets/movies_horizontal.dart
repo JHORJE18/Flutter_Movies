@@ -33,20 +33,25 @@ class MoviesHorizontalWidget extends StatelessWidget {
   }
 
   Widget _crearTarjeta(BuildContext context, Movie peli) {
+    peli.uiHero = '${peli.id}-Card';
+
     final movieCard = Container(
       margin: EdgeInsets.only(right: 15.0),
       child: Column(
         children: [
-          Card(
-            clipBehavior: Clip.antiAlias,
-            elevation: 2,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: FadeInImage(
-              image: NetworkImage(peli.getPosterImg()),
-              placeholder: AssetImage('assets/img/loading-spinner.gif'),
-              fit: BoxFit.cover,
-              height: 150.0,
+          Hero(
+            tag: peli.uiHero,
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: FadeInImage(
+                image: NetworkImage(peli.getPosterImg()),
+                placeholder: AssetImage('assets/img/loading-spinner.gif'),
+                fit: BoxFit.cover,
+                height: 150.0,
+              ),
             ),
           ),
           Text(
