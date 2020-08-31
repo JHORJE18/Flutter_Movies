@@ -22,40 +22,46 @@ class MoviesHorizontalWidget extends StatelessWidget {
 
     return Container(
       height: _screenSize.height * 0.2,
-      child: PageView(
+      child: PageView.builder(
         pageSnapping: false,
         controller: _pageController,
-        children: _tarjetas(context),
+        itemBuilder: (context, index) =>
+            _crearTarjeta(context, listadoPeliculas[index]),
+        itemCount: listadoPeliculas.length,
+      ),
+    );
+  }
+
+  Widget _crearTarjeta(BuildContext context, Movie peli) {
+    return Container(
+      margin: EdgeInsets.only(right: 15.0),
+      child: Column(
+        children: [
+          Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: FadeInImage(
+              image: NetworkImage(peli.getPosterImg()),
+              placeholder: AssetImage('assets/img/loading-spinner.gif'),
+              fit: BoxFit.cover,
+              height: 150.0,
+            ),
+          ),
+          Text(
+            peli.title,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.caption,
+          )
+        ],
       ),
     );
   }
 
   List<Widget> _tarjetas(BuildContext context) {
     return listadoPeliculas.map((peli) {
-      return Container(
-        margin: EdgeInsets.only(right: 15.0),
-        child: Column(
-          children: [
-            Card(
-              clipBehavior: Clip.antiAlias,
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              child: FadeInImage(
-                image: NetworkImage(peli.getPosterImg()),
-                placeholder: AssetImage('assets/img/loading-spinner.gif'),
-                fit: BoxFit.cover,
-                height: 150.0,
-              ),
-            ),
-            Text(
-              peli.title,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
-            )
-          ],
-        ),
-      );
+      return _crearTarjeta(context, peli);
     }).toList();
   }
 }
