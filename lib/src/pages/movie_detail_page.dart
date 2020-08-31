@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movies/src/models/actor_mode.dart';
 import 'package:movies/src/models/movie_model.dart';
+import 'package:movies/src/provider/movies_provider.dart';
 
 class MovieDetailPage extends StatelessWidget {
   @override
@@ -18,11 +20,8 @@ class MovieDetailPage extends StatelessWidget {
                 height: 10.0,
               ),
               _descripcion(context, movie),
-              _descripcion(context, movie),
-              _descripcion(context, movie),
-              _descripcion(context, movie),
-              _descripcion(context, movie),
-              _descripcion(context, movie),
+              Divider(),
+              _crearCasting(context, movie),
             ]),
           )
         ],
@@ -122,6 +121,63 @@ class MovieDetailPage extends StatelessWidget {
         movie.overview,
         textAlign: TextAlign.justify,
         style: Theme.of(context).textTheme.bodyText2,
+      ),
+    );
+  }
+
+  Widget _crearCasting(BuildContext context, Movie movie) {
+    final MovieProvider movieProvider = new MovieProvider();
+
+    return FutureBuilder(
+      future: movieProvider.getCast(movie.id),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return _crearActoresPageView(snapshot.data);
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _crearActoresPageView(List<Actor> cast) {
+    return SizedBox(
+      height: 200.0,
+      child: PageView.builder(
+        pageSnapping: false,
+        controller: PageController(initialPage: 1, viewportFraction: 0.3),
+        itemCount: cast.length,
+        itemBuilder: (context, index) {
+          return _crearCardActor(cast[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _crearCardActor(Actor actor) {
+    return Container(
+      margin: EdgeInsets.only(right: 15.0),
+      child: Column(
+        children: [
+          Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: FadeInImage(
+              image: NetworkImage(actor.getPicture()),
+              placeholder: AssetImage('assets/img/loading-spinner.gif'),
+              fit: BoxFit.cover,
+              height: 150.0,
+            ),
+          ),
+          Text(
+            actor.name,
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
       ),
     );
   }
