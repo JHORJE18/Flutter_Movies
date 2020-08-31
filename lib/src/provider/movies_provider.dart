@@ -67,7 +67,25 @@ class MovieProvider {
     final decodedData = json.decode(resp.body);
 
     final cast = Cast.fromJsonList(decodedData['cast']);
+    cast.actores.forEach((actor) {
+      getActorDetails(actor.id).then((value) {
+        actor.actorDetail = value;
+      });
+    });
     return cast.actores;
+  }
+
+  Future<ActorDetail> getActorDetails(int idActor) async {
+    final Uri llamadaUrl =
+        Uri.https(_url, _apiVersion + '/person/${idActor.toString()}', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+
+    final resp = await http.get(llamadaUrl);
+    final decodedData = json.decode(resp.body);
+
+    return ActorDetail.fromJson(decodedData);
   }
 
   Future<List<Movie>> _getResults(Uri url) async {
